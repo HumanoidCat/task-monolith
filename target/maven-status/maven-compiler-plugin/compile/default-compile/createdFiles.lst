@@ -1,0 +1,7 @@
+com\taskmonolith\repository\TaskRepository.class
+com\taskmonolith\TaskMonolith.class
+com\taskmonolith\model\Task$Status.class
+com\taskmonolith\TaskApp.class
+com\taskmonolith\service\TaskService.class
+com\taskmonolith\model\Task$Priority.class
+com\taskmonolith\model\Task.class
