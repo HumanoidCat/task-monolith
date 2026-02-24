@@ -1,0 +1,105 @@
+@startuml diagrama_arquitectura_monolitica
+' ============================================================
+' Sistema de Gestión de Tareas — Arquitectura Monolítica
+' Grupo 1 | Ingeniería de Software I | Universidad Invenio
+'
+' Herramienta: PlantUML
+' Generar online: https://www.plantuml.com/plantuml/uml/
+' Generar local:  java -jar plantuml.jar diagrama.puml
+' ============================================================
+
+title Sistema de Gestión de Tareas\nArquitectura Monolítica — Diagrama UML de Componentes
+
+skinparam componentStyle rectangle
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+
+skinparam package {
+    BackgroundColor #DDEEFF
+    BorderColor     #2E75B6
+    FontColor       #1F3864
+    FontStyle       bold
+}
+
+skinparam component {
+    BackgroundColor #EBF3FB
+    BorderColor     #2E75B6
+    FontColor       #1F3864
+}
+
+skinparam database {
+    BackgroundColor #FFF2CC
+    BorderColor     #D6A800
+}
+
+skinparam note {
+    BackgroundColor #F9F9F9
+    BorderColor     #AAAAAA
+}
+
+skinparam arrow {
+    Color     #2E75B6
+    FontColor #555555
+    FontSize  10
+}
+
+actor "Usuario" as User
+
+package "task-monolith-1.0.jar\n(Single Deployment Unit — un solo proceso JVM)" {
+
+    package "Capa de Presentación" #E8F4FD {
+        component [TaskApp.java\n(Interfaz Gráfica Swing)]  as GUI
+        component [TaskMonolith.java\n(Interfaz Consola)]   as CLI
+    }
+
+    package "Capa de Lógica de Negocio" #EBF5EB {
+        component [TaskService.java\n\n• createTask()\n• updateStatus()\n• deleteTask()\n• getTasksByStatus()\n• getAllTasks()] as Service
+    }
+
+    package "Capa de Acceso a Datos" #FFF8EC {
+        component [TaskRepository.java\n\n• save()\n• findById()\n• findAll()\n• findByStatus()\n• delete()] as Repo
+    }
+
+    package "Modelo de Dominio" #F5F0FF {
+        component [Task.java\n\nStatus: PENDING | IN_PROGRESS\n        COMPLETED | CANCELLED\nPriority: LOW | MEDIUM | HIGH | CRITICAL] as Model
+    }
+
+    database "HashMap<String, Task>\n(In-Memory Store — PoC)" as Store
+
+}
+
+User          -down->  GUI     : interactúa (click / formulario)
+User          -down->  CLI     : interactúa (stdin)
+
+GUI           ..>  Service : "llama en memoria\n(sin HTTP, ~10 ns)"
+CLI           ..>  Service : "llama en memoria\n(sin HTTP, ~10 ns)"
+
+Service       ..>  Repo    : "llama en memoria\n(sin HTTP, ~10 ns)"
+Service       ..>  Model   : usa / valida
+Repo          ..>  Model   : lee / escribe
+Repo          -down->  Store   : persiste
+
+note right of GUI
+  Punto de entrada principal.
+  java -jar task-monolith-1.0.jar
+  lanza la interfaz gráfica Swing.
+end note
+
+note right of Service
+  Único lugar donde viven
+  las 3 reglas de negocio:
+  1. CANCELLED es inmutable
+  2. COMPLETED no retrocede
+  3. Solo COMPLETED puede eliminarse
+end note
+
+note bottom of Store
+  PoC: persistencia en memoria.
+  Los datos se pierden al cerrar.
+  En producción se reemplazaría
+  por una DB relacional sin cambiar
+  ninguna otra capa.
+end note
+
+@enduml
