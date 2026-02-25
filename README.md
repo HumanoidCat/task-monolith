@@ -83,7 +83,7 @@ mvn clean package
 Esto generará el archivo:
 
 ```
-target/task-monolith-1.0.0.jar
+target/task-monolith-1.0.jar
 ```
 
 El nombre puede variar según la versión definida en el `pom.xml`.
@@ -113,13 +113,13 @@ Versión consola:
 Versión gráfica (si el JAR tiene configurado TaskApp como Main-Class):
 
 ```bash
-java -jar target/task-monolith-1.0.0.jar
+java -jar target/task-monolith-1.0.jar
 ```
 
 Versión consola:
 
 ```bash
-java -cp target/task-monolith-1.0.0.jar com.taskmonolith.TaskMonolith
+java -cp target/task-monolith-1.0.jar com.taskmonolith.TaskMonolith
 ```
 
 ---
