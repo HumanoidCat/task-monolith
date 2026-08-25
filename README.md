@@ -1,9 +1,6 @@
 # Sistema de Gestión de Tareas — Arquitectura Monolítica
 
-**Grupo 1 | Ingeniería de Software I | Universidad Invenio**
-
-Alejandro Zamora · Alejandro Luna · César Ubau · Saúl Ramírez  
-Profesor: Darin Mauricio Gamboa
+**Ingeniería de Software I | Universidad Invenio**
 
 ---
 
